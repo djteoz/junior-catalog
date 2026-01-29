@@ -1,0 +1,60 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: junior-app
+        container_name: junior_app
+        restart: unless-stopped
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - junior-network
+        depends_on:
+            - db
+
+    web:
+        image: nginx:alpine
+        container_name: junior_web
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www/html:cached
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+        networks:
+            - junior-network
+        depends_on:
+            - app
+
+    db:
+        image: postgres:15
+        container_name: junior_db
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: junior_catalog
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: hyEF9TuXqgWx
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        ports:
+            - "5433:5432"
+        networks:
+            - junior-network
+
+    node:
+        image: node:18
+        container_name: junior_node
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+        command: ["tail", "-f", "/dev/null"]
+        networks:
+            - junior-network
+
+volumes:
+    pgdata:
+
+networks:
+    junior-network:
+        driver: bridge
