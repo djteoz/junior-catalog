@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, pdo, pdo_sqlite, pdo_pgsql, zip
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist
+
+      - name: Prepare env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Set DB to sqlite in-memory
+        run: |
+          php -r "file_put_contents('.env', preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=sqlite', file_get_contents('.env')));"
+          php -r "file_put_contents('.env', preg_replace('/DB_DATABASE=.*/', 'DB_DATABASE=:memory:', file_get_contents('.env')));"
+
+      - name: Run Pint
+        run: ./vendor/bin/pint --quiet
+
+      - name: Run Feature tests
+        run: php artisan test --no-interaction --testsuite=Feature --testdox
