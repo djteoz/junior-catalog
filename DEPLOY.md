@@ -26,4 +26,14 @@ Security & tips:
 
 - Do not commit production `.env`. Use GitHub Secrets or a vault for production env vars.
 - Consider using GHCR (GitHub Container Registry) if you prefer a GitHub-native registry; adapt the workflow accordingly.
-- For production, ensure `APP_ENV=production`, `APP_DEBUG=false`, and `APP_KEY` is set.
+-- For production, ensure `APP_ENV=production`, `APP_DEBUG=false`, and `APP_KEY` is set.
+
+## CORS & Sanctum
+
+- In `config/cors.php` the app now reads `CORS_ALLOWED_ORIGINS` (or `FRONTEND_URL`) from the environment. Set this to your frontend host(s) in production (comma-separated).
+- If you use Laravel Sanctum with cookie-based auth, set `CORS_SUPPORTS_CREDENTIALS=true` and configure `SANCTUM_STATEFUL_DOMAINS` and `SESSION_DOMAIN` accordingly.
+
+## Performance notes
+
+- Vite is configured to extract `node_modules` into a `vendor` chunk to reduce the main bundle size. You can further split large features using dynamic `import()` in Vue components.
+- The build will warn on large chunks; consider code-splitting or lazy-loading admin pages.

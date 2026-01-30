@@ -15,11 +15,22 @@ return [
     |
     */
 
+
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    /*
+    |--------------------------------------------------------------------------
+    | Allowed Origins
+    |--------------------------------------------------------------------------
+    |
+    | For production it's recommended to restrict allowed origins to the
+    | concrete frontend host(s). You can set `FRONTEND_URL` in the
+    | environment (comma-separated if multiple) and it will be used here.
+    |
+    */
+    'allowed_origins' => explode(',', env('CORS_ALLOWED_ORIGINS', env('FRONTEND_URL', 'http://localhost:5173'))),
 
     'allowed_origins_patterns' => [],
 
@@ -29,6 +40,15 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    /*
+    |--------------------------------------------------------------------------
+    | Supports Credentials
+    |--------------------------------------------------------------------------
+    |
+    | Set to true if you use cookie-based auth (Sanctum) from the frontend.
+    | For token-based auth (Authorization header) this can remain false.
+    |
+    */
+    'supports_credentials' => env('CORS_SUPPORTS_CREDENTIALS', false),
 
 ];
