@@ -24,6 +24,14 @@ jobs:
       - name: Prepare env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
+      - name: Preflight on main: ensure APP_DEBUG!=true
+        if: github.ref == 'refs/heads/main'
+        run: |
+          if grep -E "^APP_DEBUG=true" .env.example >/dev/null; then
+            echo "APP_DEBUG is true in .env.example — set APP_DEBUG=false for production" >&2
+            exit 1
+          fi
+
       - name: Set DB to sqlite in-memory
         run: |
           php -r "file_put_contents('.env', preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=sqlite', file_get_contents('.env')));"

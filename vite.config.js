@@ -13,8 +13,12 @@ export default defineConfig({
             output: {
                 manualChunks(id) {
                     if (id.includes('node_modules')) {
+                        if (id.includes('element-plus')) return 'vendor-element-plus';
+                        if (id.includes('vue')) return 'vendor-vue';
                         return 'vendor';
                     }
+                    // keep default for other modules
+                    return undefined;
                 }
             }
         },
