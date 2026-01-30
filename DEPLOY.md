@@ -33,6 +33,16 @@ Security & tips:
 - In `config/cors.php` the app now reads `CORS_ALLOWED_ORIGINS` (or `FRONTEND_URL`) from the environment. Set this to your frontend host(s) in production (comma-separated).
 - If you use Laravel Sanctum with cookie-based auth, set `CORS_SUPPORTS_CREDENTIALS=true` and configure `SANCTUM_STATEFUL_DOMAINS` and `SESSION_DOMAIN` accordingly.
 
+## Session & Cookie recommendations
+
+- Set `SESSION_DOMAIN` to your frontend domain (e.g. `.example.com`) so cookies are scoped properly.
+- Set `SESSION_SECURE_COOKIE=true` in production and ensure your site uses HTTPS.
+- `SESSION_SAME_SITE` should be `lax` or `none` depending on cross-site needs; use `none` together with `SESSION_SECURE_COOKIE=true` when cookies must be sent cross-site.
+
+## CD secrets preflight
+
+- The CD workflow now performs a preflight check to ensure `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` are configured in repository secrets. The build will fail early if they are missing.
+
 ## Performance notes
 
 - Vite is configured to extract `node_modules` into a `vendor` chunk to reduce the main bundle size. You can further split large features using dynamic `import()` in Vue components.

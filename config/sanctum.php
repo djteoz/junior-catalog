@@ -23,6 +23,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Notes
+    |--------------------------------------------------------------------------
+    |
+    | `SANCTUM_STATEFUL_DOMAINS` should list the frontend host(s) that
+    | will use cookie-based authentication (comma-separated). For
+    | production set it to your frontend domain e.g. "app.example.com".
+    |
+    */
+
+    /*
+    |--------------------------------------------------------------------------
     | Sanctum Guards
     |--------------------------------------------------------------------------
     |
