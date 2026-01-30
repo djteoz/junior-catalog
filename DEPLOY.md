@@ -26,7 +26,7 @@ Security & tips:
 
 - Do not commit production `.env`. Use GitHub Secrets or a vault for production env vars.
 - Consider using GHCR (GitHub Container Registry) if you prefer a GitHub-native registry; adapt the workflow accordingly.
--- For production, ensure `APP_ENV=production`, `APP_DEBUG=false`, and `APP_KEY` is set.
+  -- For production, ensure `APP_ENV=production`, `APP_DEBUG=false`, and `APP_KEY` is set.
 
 ## CORS & Sanctum
 
