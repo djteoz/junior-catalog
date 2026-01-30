@@ -22,6 +22,11 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Run pre-deploy checks
+        run: |
+          chmod +x ./scripts/check_deploy.sh
+          ./scripts/check_deploy.sh
+
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
