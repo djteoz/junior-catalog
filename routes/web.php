@@ -10,6 +10,12 @@ Route::get('/', function () {
 Route::get('/product/{id}', function ($id) {
     return Inertia::render('Public/ProductShow', ['id' => $id]);
 });
+Route::get('/cart', function () {
+    return Inertia::render('Public/Cart');
+});
+Route::get('/favorites', function () {
+    return Inertia::render('Public/Favorites');
+});
 
 // Auth / Admin pages
 Route::get('/login', function () {
@@ -39,6 +45,5 @@ Route::get('/admin/products/{id}/edit', function ($id) {
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// The default welcome route was removed so the Inertia route defined above
+// `Route::get('/', fn() => Inertia::render('Public/ProductsIndex'))` will be used.

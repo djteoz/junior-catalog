@@ -9,7 +9,7 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        // create 40 products spread across categories
-        Product::factory()->count(40)->create();
+        // create 24 products (matching ProductFactory array)
+        Product::factory()->count(24)->create();
     }
 }

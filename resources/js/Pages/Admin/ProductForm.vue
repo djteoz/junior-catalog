@@ -1,48 +1,90 @@
 <template>
-    <div class="p-6">
-        <h1>{{ isEdit ? "Edit" : "Create" }} Product</h1>
-        <form @submit.prevent="submit">
-            <el-form :model="form" label-width="120px">
-                <el-form-item label="Name">
-                    <el-input v-model="form.name" required></el-input>
-                </el-form-item>
+    <div class="min-h-screen bg-bg py-8">
+        <div class="max-w-2xl mx-auto px-4 sm:px-6">
+            <div class="bg-white rounded-lg shadow-soft p-6">
+                <h2 class="text-xl font-semibold mb-4">
+                    {{ isEdit ? "Edit" : "Create" }} Product
+                </h2>
+                <form @submit.prevent="submit" class="space-y-4">
+                    <div>
+                        <label for="product-name" class="text-sm text-gray-600"
+                            >Name</label
+                        >
+                        <input
+                            id="product-name"
+                            name="name"
+                            v-model="form.name"
+                            required
+                            class="w-full rounded-md border px-3 py-2 mt-1"
+                        />
+                    </div>
 
-                <el-form-item label="Category">
-                    <el-select
-                        v-model="form.category_id"
-                        placeholder="Select category"
-                    >
-                        <el-option
-                            v-for="c in categories"
-                            :key="c.id"
-                            :label="c.name"
-                            :value="c.id"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
+                    <div>
+                        <label
+                            for="product-category"
+                            class="text-sm text-gray-600"
+                            >Category</label
+                        >
+                        <select
+                            id="product-category"
+                            name="category_id"
+                            v-model="form.category_id"
+                            class="w-full rounded-md border px-3 py-2 mt-1"
+                        >
+                            <option value="">Select category</option>
+                            <option
+                                v-for="c in categories"
+                                :key="c.id"
+                                :value="c.id"
+                            >
+                                {{ c.name }}
+                            </option>
+                        </select>
+                    </div>
 
-                <el-form-item label="Price">
-                    <el-input
-                        v-model.number="form.price"
-                        type="number"
-                    ></el-input>
-                </el-form-item>
+                    <div>
+                        <label for="product-price" class="text-sm text-gray-600"
+                            >Price</label
+                        >
+                        <input
+                            id="product-price"
+                            name="price"
+                            type="number"
+                            v-model.number="form.price"
+                            class="w-full rounded-md border px-3 py-2 mt-1"
+                        />
+                    </div>
 
-                <el-form-item label="Description">
-                    <el-input
-                        type="textarea"
-                        v-model="form.description"
-                    ></el-input>
-                </el-form-item>
+                    <div>
+                        <label
+                            for="product-description"
+                            class="text-sm text-gray-600"
+                            >Description</label
+                        >
+                        <textarea
+                            id="product-description"
+                            name="description"
+                            v-model="form.description"
+                            class="w-full rounded-md border px-3 py-2 mt-1 h-32"
+                        ></textarea>
+                    </div>
 
-                <el-form-item>
-                    <el-button type="primary" @click="submit">Save</el-button>
-                    <inertia-link href="/admin/products" class="el-button"
-                        >Cancel</inertia-link
-                    >
-                </el-form-item>
-            </el-form>
-        </form>
+                    <div class="flex justify-end gap-3">
+                        <inertia-link
+                            href="/admin/products"
+                            class="px-4 py-2 rounded-md border"
+                            >Cancel</inertia-link
+                        >
+                        <button
+                            type="submit"
+                            class="px-4 py-2 bg-primary text-white rounded-md"
+                        >
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </template>
 

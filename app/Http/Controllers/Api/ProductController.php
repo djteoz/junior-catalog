@@ -18,10 +18,38 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $query = Product::with('category')->orderBy('id', 'desc');
+        $query = Product::with('category');
 
+        // Фильтр по категории
         if ($request->filled('category_id')) {
             $query->where('category_id', $request->input('category_id'));
+        }
+
+        // Поиск
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'ILIKE', "%{$search}%")
+                  ->orWhere('description', 'ILIKE', "%{$search}%");
+            });
+        }
+
+        // Фильтр по цене
+        if ($request->filled('price_min')) {
+            $query->where('price', '>=', $request->input('price_min'));
+        }
+        if ($request->filled('price_max')) {
+            $query->where('price', '<=', $request->input('price_max'));
+        }
+
+        // Сортировка
+        $sort = $request->input('sort', 'id');
+        $order = $request->input('order', 'desc');
+        
+        if (in_array($sort, ['id', 'price', 'name', 'created_at'])) {
+            $query->orderBy($sort, $order === 'asc' ? 'asc' : 'desc');
+        } else {
+            $query->orderBy('id', 'desc');
         }
 
         $perPage = (int) $request->input('per_page', 12);

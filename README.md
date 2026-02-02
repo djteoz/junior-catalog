@@ -1,83 +1,367 @@
-## Testing
+# Каталог товаров - Интернет-магазин
+
+Тестовое задание для Junior Full-Stack Developer (Laravel + Vue.js + Inertia.js)
+
+## 🚀 Технологии
+
+### Backend
+- **Laravel 10** - PHP-фреймворк
+- **PostgreSQL** - база данных
+- **Laravel Sanctum** - API аутентификация
+- **Eloquent ORM** - работа с БД
+
+### Frontend
+- **Vue.js 3** (Composition API)
+- **Inertia.js 0.6** - SPA без написания API endpoints
+- **Tailwind CSS 3.4** - стилизация
+- **Element Plus 2.13** - UI-компоненты
+- **Vite 5** - сборщик
+
+### DevOps
+- **Docker + Docker Compose** - контейнеризация
+- **Nginx** - веб-сервер
+- **PHP-FPM 8.1** - FastCGI Process Manager
 
 ---
 
-Запуск тестов (в контейнере `app`):
+## ✅ Выполненные требования
+
+### Часть 1: Backend (Laravel API)
+
+#### ✅ Модели и миграции
+- [x] Product (id, name, description, price, category_id, image, timestamps)
+- [x] Category (id, name, description, timestamps)
+- [x] Связи: `belongsTo` / `hasMany` между Product ↔ Category
+- [x] **БОНУС**: Soft Deletes для товаров
+
+#### ✅ API Endpoints (Resource-контроллеры)
+- [x] `GET /api/products` - список с пагинацией (12 по умолчанию, настраиваемо 5-50)
+- [x] `GET /api/products/{id}` - просмотр одного товара
+- [x] `POST /api/products` - создание (требует аутентификацию)
+- [x] `PUT/PATCH /api/products/{id}` - обновление (требует аутентификацию)
+- [x] `DELETE /api/products/{id}` - удаление (требует аутентификацию)
+- [x] `GET /api/categories` - список всех категорий
+- [x] **ProductResource** для форматирования JSON-ответов
+- [x] **Eager loading** (`with('category')`) для оптимизации запросов
+
+#### ✅ Аутентификация (Sanctum)
+- [x] `POST /api/login` - получение токена
+- [x] `POST /api/logout` - выход (требует токен)
+- [x] Middleware `auth:sanctum` на административных endpoints
+- [x] GET-запросы публичные (без аутентификации)
+
+#### ✅ Валидация (Form Requests)
+- [x] **StoreProductRequest** - валидация при создании
+- [x] **UpdateProductRequest** - валидация при обновлении
+- [x] Правила: `name` (required, string), `price` (required, numeric, min:0.01), `category_id` (required, exists)
+- [x] Корректные HTTP-коды: 201 (создан), 404 (не найден), 204 (удалён)
+
+---
+
+### Часть 2: Frontend (Vue.js)
+
+#### ✅ Публичная часть (без аутентификации)
+
+##### Главная страница (/)
+- [x] Список товаров с **бесконечной прокруткой** (вместо обычной пагинации)
+- [x] Карточки товаров: название, категория, цена, описание
+- [x] Фильтрация по категориям (выпадающий список)
+- [x] **БОНУС**: Поиск по названию/описанию с дебаунсом 500ms
+- [x] **БОНУС**: Сортировка (по новизне, цене ↑↓)
+- [x] **БОНУС**: Фильтр по диапазону цен (0 - 200 000₽)
+
+##### Карточка товара (/product/{id})
+- [x] Подробная информация о товаре
+- [x] Профессиональный дизайн (стиль Ozon/Wildberries)
+- [x] Хлебные крошки навигации
+- [x] Большое изображение (500px)
+- [x] Характеристики товара
+- [x] Рекомендуемые товары из той же категории
+- [x] **БОНУС**: Кнопка "Добавить в корзину"
+- [x] **БОНУС**: Кнопка "В избранное" с визуальной индикацией
+
+##### Дополнительные публичные страницы
+- [x] **БОНУС**: `/cart` - корзина покупок с управлением количеством
+- [x] **БОНУС**: `/favorites` - список избранных товаров
+
+#### ✅ Административная часть (с аутентификацией)
+
+##### Страница логина (/login)
+- [x] Форма ввода email/пароль
+- [x] Токен сохраняется в localStorage
+- [x] **Предустановленный админ**: admin@example.com / password
+
+##### Админ-панель
+- [x] Боковое меню навигации
+- [x] Список товаров (/admin/products)
+- [x] Кнопки: "Add Product", "Edit", "Delete"
+- [x] **БОНУС**: Модальное окно подтверждения удаления (Element Plus MessageBox)
+
+##### Форма создания/редактирования товара
+- [x] `/admin/products/create` - создание
+- [x] `/admin/products/{id}/edit` - редактирование
+- [x] Поля: название (input), категория (select), описание (textarea), цена (number)
+- [x] Валидация на фронтенде (required, min для цены)
+- [x] Редирект на список товаров после успешного сохранения
+
+---
+
+## 🎁 Дополнительные функции (Бонусы)
+
+### Backend
+- [x] **Docker** - полная контейнеризация (php-fpm, nginx, postgres, node)
+- [x] **Soft Deletes** - мягкое удаление товаров
+- [x] **Seeders** - заполнение БД тестовыми данными:
+  - AdminUserSeeder (admin@example.com)
+  - CategorySeeder (6 категорий)
+  - ProductSeeder (24 товара с реальными изображениями)
+- [x] **PHPUnit тесты** - `ProductApiTest.php`, `ProductApiAdditionalTest.php`
+
+### Frontend
+- [x] **Composables** - вынос логики в переиспользуемые функции:
+  - `useAuth.js` - работа с аутентификацией
+  - `useProductApi.js` - работа с API товаров
+- [x] **UI библиотека** - Element Plus + Tailwind CSS
+- [x] **Модальное окно удаления** - ElMessageBox вместо стандартного confirm()
+- [x] **Дебаунс для поиска** - 500ms задержка
+- [x] **Корзина покупок** - localStorage + счетчик в header
+- [x] **Избранное** - localStorage + счетчик в header
+- [x] **Бесконечная прокрутка** - IntersectionObserver API
+- [x] **Адаптивный дизайн** - responsive layout для всех экранов
+
+---
+
+## 📦 Установка и запуск
+
+### Требования
+- Docker Desktop
+- Git
+
+### Быстрый старт
 
 ```bash
-docker compose exec app php artisan test
+# Клонировать репозиторий
+git clone https://github.com/djteoz/junior-catalog.git
+cd junior-catalog
+
+# Запустить контейнеры
+docker-compose up -d
+
+# Установить зависимости Laravel
+docker-compose exec app composer install
+
+# Установить зависимости Node.js
+docker-compose exec node npm install
+
+# Настроить .env файл
+docker-compose exec app cp .env.example .env
+docker-compose exec app php artisan key:generate
+
+# Запустить миграции и сидеры
+docker-compose exec app php artisan migrate:fresh --seed
+
+# Собрать фронтенд
+docker-compose exec node npm run build
+
+# Открыть в браузере
+# http://localhost:9000
 ```
 
-Демо-админ:
+### Доступы
 
+**Админ-панель**: http://localhost:9000/login
 - Email: `admin@example.com`
-- Password: `password`
+- Пароль: `password`
 
-Если нужно — могу добавить инструкции по деплою или пример `docker-compose.prod.yml`.
+**База данных**:
+- Host: `localhost`
+- Port: `5433`
+- Database: `laravel`
+- User: `laravel`
+- Password: `secret`
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+---
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 🗂️ Структура проекта
 
-## About Laravel
+```
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/Api/
+│   │   │   ├── AuthController.php      # Аутентификация
+│   │   │   └── ProductController.php   # CRUD товаров
+│   │   ├── Requests/
+│   │   │   ├── StoreProductRequest.php # Валидация создания
+│   │   │   └── UpdateProductRequest.php # Валидация обновления
+│   │   └── Resources/
+│   │       └── ProductResource.php      # JSON Resource
+│   └── Models/
+│       ├── Category.php                 # Модель категории
+│       ├── Product.php                  # Модель товара (+ SoftDeletes)
+│       └── User.php                     # Модель пользователя
+├── database/
+│   ├── factories/
+│   │   ├── CategoryFactory.php
+│   │   └── ProductFactory.php           # 24 товара с реальными данными
+│   ├── migrations/                      # Миграции БД
+│   └── seeders/
+│       ├── AdminUserSeeder.php
+│       ├── CategorySeeder.php
+│       └── ProductSeeder.php
+├── resources/
+│   ├── css/
+│   │   └── app.css                      # Tailwind CSS
+│   └── js/
+│       ├── Components/
+│       │   ├── AppFooter.vue            # Футер
+│       │   ├── AppHeader.vue            # Хедер с корзиной и избранным
+│       │   ├── Pagination.vue           # Пагинация (не используется)
+│       │   └── ProductCard.vue          # Карточка товара
+│       ├── composables/
+│       │   ├── useAuth.js               # Логика аутентификации
+│       │   └── useProductApi.js         # Логика работы с API
+│       ├── Pages/
+│       │   ├── Admin/
+│       │   │   ├── ProductForm.vue      # Форма создания/редактирования
+│       │   │   └── ProductsIndex.vue    # Список товаров (админ)
+│       │   ├── Auth/
+│       │   │   └── Login.vue            # Страница логина
+│       │   └── Public/
+│       │       ├── Cart.vue             # Корзина покупок
+│       │       ├── Favorites.vue        # Избранное
+│       │       ├── ProductShow.vue      # Страница товара
+│       │       └── ProductsIndex.vue    # Главная (каталог)
+│       └── app.js                       # Точка входа
+├── routes/
+│   ├── api.php                          # API маршруты
+│   └── web.php                          # Веб-маршруты (Inertia)
+├── tests/
+│   └── Feature/
+│       ├── ProductApiTest.php           # Тесты API товаров
+│       └── ProductApiAdditionalTest.php
+├── docker-compose.yml                   # Конфигурация Docker
+├── Dockerfile                           # PHP-FPM образ
+└── README.md                            # Этот файл
+```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🧪 Тестирование
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+# Запустить все тесты
+docker-compose exec app php artisan test
 
-## Learning Laravel
+# Запустить конкретный тест
+docker-compose exec app php artisan test --filter ProductApiTest
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 📝 API Endpoints
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Публичные (без токена)
+```
+GET    /api/products              # Список товаров с пагинацией
+GET    /api/products/{id}         # Один товар
+GET    /api/categories            # Все категории
+POST   /api/login                 # Получить токен
+```
 
-## Laravel Sponsors
+### Защищённые (требуют токен в заголовке `Authorization: Bearer {token}`)
+```
+POST   /api/products              # Создать товар
+PUT    /api/products/{id}         # Обновить товар
+DELETE /api/products/{id}         # Удалить товар
+POST   /api/logout                # Выйти
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Параметры GET /api/products
+- `category_id` - фильтр по категории
+- `search` - поиск по названию/описанию
+- `price_min` / `price_max` - фильтр по цене
+- `sort` - поле сортировки (id, price, name, created_at)
+- `order` - порядок (asc, desc)
+- `per_page` - количество на странице (5-50)
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## 🎨 Особенности реализации
 
-## Contributing
+### Архитектурные решения
+- **Inertia.js** - SPA без дублирования маршрутов и контроллеров
+- **Composition API** - современный подход Vue.js 3
+- **Resource классы** - единообразие JSON-ответов
+- **Form Requests** - валидация вынесена из контроллеров
+- **Composables** - переиспользуемая логика
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### UX/UI улучшения
+- Бесконечная прокрутка вместо пагинации
+- Счетчики корзины и избранного в реальном времени
+- Модальные окна подтверждений
+- Дебаунс для оптимизации запросов
+- Адаптивный дизайн для всех устройств
+- Fallback изображения для товаров без фото
 
-## Code of Conduct
+### Производительность
+- Eager loading для предотвращения N+1 проблемы
+- IntersectionObserver для ленивой загрузки
+- Vite для быстрой сборки
+- Docker multi-stage builds (опционально)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🔧 Дополнительные команды
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Разработка
 
-## License
+```bash
+# Запуск dev-сервера с hot reload
+docker-compose exec node npm run dev
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Миграции
+docker-compose exec app php artisan migrate
+docker-compose exec app php artisan migrate:fresh --seed
+
+# Очистка кэша
+docker-compose exec app php artisan cache:clear
+docker-compose exec app php artisan config:clear
+
+# Проверка кода
+docker-compose exec app ./vendor/bin/phpstan analyse
+```
+
+### Production
+
+```bash
+# Сборка для продакшн
+docker-compose exec node npm run build
+
+# Оптимизация Laravel
+docker-compose exec app php artisan config:cache
+docker-compose exec app php artisan route:cache
+docker-compose exec app php artisan view:cache
+```
+
+---
+
+## 📊 Статистика проекта
+
+- **24 товара** с реальными изображениями из российских интернет-магазинов
+- **6 категорий**: Электроника, Одежда, Дом и сад, Спорт, Книги, Красота
+- **100% покрытие** требований тестового задания
+- **10+ бонусных функций** сверх требований
+
+---
+
+## 👨‍💻 Автор
+
+Тестовое задание выполнено для позиции Junior Full-Stack Developer
+
+GitHub: https://github.com/djteoz/junior-catalog
+
+---
+
+## 📄 Лицензия
+
+MIT
