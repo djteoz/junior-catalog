@@ -15,4 +15,4 @@ cmds = [
 ]
 
 [start]
-cmd = 'php artisan migrate:fresh --seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}'
+cmd = 'echo "Starting on PORT=$PORT" && php artisan migrate:fresh --seed --force && echo "Starting Laravel on port $PORT" && php artisan serve --host=0.0.0.0 --port=$PORT'
